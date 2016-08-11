@@ -1993,6 +1993,11 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
         _dragging = NO;
         _scrolling = NO;
         _decelerating = NO;
+        
+        if (_timer != nil) {
+            // currently animating, ignore touch to let animation finish properly
+            [self scrollToItemAtIndex:self.currentItemIndex animated:true];
+        }
     }
     
     if ([gesture isKindOfClass:[UITapGestureRecognizer class]])

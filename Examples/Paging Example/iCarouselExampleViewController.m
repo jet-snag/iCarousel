@@ -77,6 +77,17 @@
     return [_items count];
 }
 
+- (CGFloat)carousel:(iCarousel *)carousel valueForOption:(iCarouselOption)option withDefault:(CGFloat)value {
+    
+    if (option == iCarouselOptionSpacing) {
+        return value * 1.02;
+    } else if( option == iCarouselOptionVisibleItems ) {
+        return 6;
+    }
+    
+    return value;
+}
+
 - (UIView *)carousel:(iCarousel *)carousel viewForItemAtIndex:(NSInteger)index reusingView:(UIView *)view
 {
     UILabel *label = nil;
@@ -87,19 +98,30 @@
         //don't do anything specific to the index within
         //this `if (view == nil) {...}` statement because the view will be
         //recycled and used with other index values later
-        view = [[UIView alloc] initWithFrame:self.carousel.bounds];
+        CGRect bound = CGRectInset(self.carousel.bounds, 20, 0);
+        UIScrollView* scrollView = [[UIScrollView alloc] initWithFrame:bound];
+        bound.size.height = 1500;
         
-        label = [[UILabel alloc] initWithFrame:view.bounds];
+        scrollView.contentSize = bound.size;
+        
+        UIView* contentView = [[UIView alloc] initWithFrame:bound];
+        
+        label = [[UILabel alloc] initWithFrame:contentView.bounds];
         label.backgroundColor = [UIColor clearColor];
         label.textAlignment = NSTextAlignmentCenter;
         label.font = [label.font fontWithSize:50];
         label.tag = 1;
-        [view addSubview:label];
+        [contentView addSubview:label];
+        
+        view = scrollView;
+        [view addSubview:contentView];
     }
     else
     {
         //get a reference to the label in the recycled view
-        label = (UILabel *)[view viewWithTag:1];
+        // label = (UILabel *)[view viewWithTag:1];
+        UIView* contentView = (UIView*) [view.subviews objectAtIndex:0];
+        label = (UILabel *)[contentView viewWithTag:1];
     }
     
     //set background color

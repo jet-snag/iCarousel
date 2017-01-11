@@ -113,6 +113,8 @@
 @property (nonatomic, assign) CGFloat offsetMultiplier;
 @property (nonatomic, assign) CGFloat startOffset;
 @property (nonatomic, assign) CGFloat endOffset;
+@property (nonatomic, assign) NSInteger previousItemIndex;
+@property (nonatomic, assign) NSInteger previousIndex;
 @property (nonatomic, assign) NSTimeInterval scrollDuration;
 @property (nonatomic, assign, getter = isScrolling) BOOL scrolling;
 @property (nonatomic, assign) NSTimeInterval startTime;
@@ -152,7 +154,7 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
     _scrollToItemBoundary = YES;
     _ignorePerpendicularSwipes = YES;
     _centerItemWhenSelected = YES;
-    _previousItemIndex = -1;
+    _previousIndex = -1;
     
     _contentView = [[UIView alloc] initWithFrame:self.bounds];
     
@@ -2051,7 +2053,7 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
 
 - (BOOL)gestureRecognizerShouldBegin:(UIGestureRecognizer *)gesture
 {
-    self.previousItemIndex = self.currentItemIndex;
+    self.previousIndex = self.currentItemIndex;
     
     if ([gesture isKindOfClass:[UIPanGestureRecognizer class]])
     {
@@ -2154,12 +2156,12 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
                         }
                         else
                         {
-                            if (self.previousItemIndex == self.currentItemIndex)
+                            if (self.previousIndex == self.currentItemIndex)
                             {
                                 // Swipe view even user taps short
                                 NSInteger direction = (int)(_startVelocity / fabs(_startVelocity));
-                                NSInteger nextItemIndex = self.previousItemIndex + direction;
-                                if (self.previousItemIndex != nextItemIndex)
+                                NSInteger nextItemIndex = self.previousIndex + direction;
+                                if (self.previousIndex != nextItemIndex)
                                     [self scrollToItemAtIndex:nextItemIndex animated:YES];
                             }
                             else

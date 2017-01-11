@@ -107,7 +107,6 @@
 @property (nonatomic, strong) NSMutableSet *itemViewPool;
 @property (nonatomic, strong) NSMutableSet *placeholderViewPool;
 @property (nonatomic, assign) CGFloat previousScrollOffset;
-@property (nonatomic, assign) NSInteger previousItemIndex;
 @property (nonatomic, assign) NSInteger numberOfPlaceholdersToShow;
 @property (nonatomic, assign) NSInteger numberOfVisibleItems;
 @property (nonatomic, assign) CGFloat itemWidth;
@@ -152,6 +151,7 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
     _scrollToItemBoundary = YES;
     _ignorePerpendicularSwipes = YES;
     _centerItemWhenSelected = YES;
+    _previousItemIndex = -1;
     
     _contentView = [[UIView alloc] initWithFrame:self.bounds];
     
@@ -2050,6 +2050,8 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
 
 - (BOOL)gestureRecognizerShouldBegin:(UIGestureRecognizer *)gesture
 {
+    self.previousItemIndex = self.currentItemIndex;
+    
     if ([gesture isKindOfClass:[UIPanGestureRecognizer class]])
     {
         //ignore vertical swipes
@@ -2151,7 +2153,16 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
                         }
                         else
                         {
-                            [self scrollToItemAtIndex:self.currentItemIndex animated:YES];
+                            if (self.previousItemIndex == self.currentItemIndex)
+                            {
+                                // Swipe view even user taps short
+                                NSInteger direction = (int)(_startVelocity / fabs(_startVelocity));
+                                NSInteger nextItemIndex = self.previousItemIndex + direction;
+                                if (self.previousItemIndex != nextItemIndex)
+                                    [self scrollToItemAtIndex:nextItemIndex animated:YES];
+                            }
+                            else
+                                [self scrollToItemAtIndex:self.currentItemIndex animated:YES];
                         }
                     }
                     else

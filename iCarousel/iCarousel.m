@@ -2059,7 +2059,7 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
     {
         //ignore vertical swipes
         UIPanGestureRecognizer *panGesture = (UIPanGestureRecognizer *)gesture;
-        CGPoint translation = [panGesture translationInView:self];
+        CGPoint translation = [panGesture velocityInView:self];
         if (_ignorePerpendicularSwipes)
         {
             if (_vertical)

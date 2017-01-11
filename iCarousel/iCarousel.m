@@ -147,6 +147,7 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
     _viewpointOffset = CGSizeZero;
     _scrollSpeed = 1.0;
     _bounceDistance = 1.0;
+    _swipeActionRate = 0.1;
     _stopAtItemBoundary = YES;
     _scrollToItemBoundary = YES;
     _ignorePerpendicularSwipes = YES;
@@ -2061,11 +2062,11 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
         {
             if (_vertical)
             {
-                return fabs(translation.x) <= fabs(translation.y);
+                return fabs(translation.x) * _swipeActionRate <= fabs(translation.y);
             }
             else
             {
-                return fabs(translation.x) >= fabs(translation.y);
+                return fabs(translation.x) >= fabs(translation.y) * _swipeActionRate;
             }
         }
     }

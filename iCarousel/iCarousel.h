@@ -114,6 +114,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, assign) CGFloat decelerationRate;
 @property (nonatomic, assign) CGFloat scrollSpeed;
 @property (nonatomic, assign) CGFloat bounceDistance;
+@property (nonatomic, assign) CGFloat swipeActionRate;
 @property (nonatomic, assign, getter = isScrollEnabled) BOOL scrollEnabled;
 @property (nonatomic, assign, getter = isPagingEnabled) BOOL pagingEnabled;
 @property (nonatomic, assign, getter = isVertical) BOOL vertical;
